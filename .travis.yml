@@ -1,0 +1,20 @@
+#
+# This file is part of the CRUDlexSilex2 package.
+#
+# (c) Philip Lehmann-Böhm <philip@philiplb.de>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+#
+
+language: php
+before_script:
+    - mysql -e 'CREATE DATABASE crudTest;'
+    - composer install --dev --prefer-source
+script: vendor/bin/phpunit --coverage-clover=coverage.clover
+php:
+    - 7.1
+    - 7.2
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
