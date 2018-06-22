@@ -82,7 +82,6 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
             $crudFileCachingDirectory = $app->offsetExists('crud.filecachingdirectory') ? $app['crud.filecachingdirectory'] : null;
             $entityDefinitionFactory  = $app->offsetExists('crud.entitydefinitionfactory') ? $app['crud.entitydefinitionfactory'] : new EntityDefinitionFactory();
             $result                   = new Service($app['crud.file'], $crudFileCachingDirectory, $app['url_generator'], $app['translator'], $app['crud.datafactory'], $entityDefinitionFactory, $app['crud.filesystem'], $validator);
-            $result->setTemplate('layout', '@crud/layout.twig');
             return $result;
         };
     }
