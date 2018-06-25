@@ -24,12 +24,29 @@ use Silex\Provider\LocaleServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 /**
  * The ServiceProvider setups and initializes the service for Silex.
  */
 class ServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
+
+    /**
+     * Initializes the available locales.
+     *
+     * @param Container $app
+     * the application container
+     */
+    protected function initLocales(Container $app)
+    {
+        $locales   = Service::getLocales();
+        $localeDir = __DIR__.'/../../../../CRUDlex/src/locales';
+        $app['translator']->addLoader('yaml', new YamlFileLoader());
+        foreach ($locales as $locale) {
+            $app['translator']->addResource('yaml', $localeDir.'/'.$locale.'.yml', $locale);
+        }
+    }
 
     /**
      * Initializes needed but yet missing service providers.
@@ -95,6 +112,7 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
     public function boot(Application $app)
     {
         $this->initMissingServiceProviders($app);
+        $this->initLocales($app);
         $twigSetup = new TwigSetup();
         $twigSetup->registerTwigExtensions($app);
     }
