@@ -71,7 +71,6 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
         if (!$app->offsetExists('twig')) {
             $app->register(new TwigServiceProvider());
         }
-        $app['twig.loader.filesystem']->addPath(__DIR__.'/../../../../CRUDlex/src/views/', 'crud');
     }
 
     /**
