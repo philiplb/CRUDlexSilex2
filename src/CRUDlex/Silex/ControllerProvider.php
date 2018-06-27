@@ -42,6 +42,12 @@ class ControllerProvider implements ControllerProviderInterface
 {
 
     /**
+     * Holds the path to the templates.
+     * @var string
+     */
+    protected $templatePath;
+
+    /**
      * Setups the templates.
      *
      * @param Application $app
@@ -50,7 +56,7 @@ class ControllerProvider implements ControllerProviderInterface
     protected function setupTemplates(Application $app)
     {
         if ($app->offsetExists('twig.loader.filesystem')) {
-            $app['twig.loader.filesystem']->addPath(__DIR__.'/../../../../CRUDlex/src/views/', 'crud');
+            $app['twig.loader.filesystem']->addPath($this->templatePath, 'crud');
         }
     }
 
@@ -82,6 +88,25 @@ class ControllerProvider implements ControllerProviderInterface
         $factory->get('/setting/locale/{locale}', [$controller, 'setLocale'])->bind('crudSetLocale');
 
         return $factory;
+    }
+
+    /**
+     * ControllerProvider constructor.
+     */
+    public function __construct()
+    {
+        $this->templatePath = __DIR__.'/../../../../CRUDlex/src/views/';
+    }
+
+    /**
+     * Sets the path to the templates.
+     *
+     * @param string $templatePath
+     * the new template path
+     */
+    public function setTemplatePath($templatePath)
+    {
+        $this->templatePath = $templatePath;
     }
 
     /**

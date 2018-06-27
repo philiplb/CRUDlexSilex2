@@ -57,6 +57,7 @@ class ControllerProviderTest extends TestCase
     {
         $app = $this->getApp();
         $controllerProvider = new ControllerProvider();
+        $controllerProvider->setTemplatePath(__DIR__.'/../../../vendor/philiplb/crudlex/src/views');
         $app['session']->set('locale', 'de');
         $controllerProvider->setupI18n(new Request(), $app);
         $actual = $app['translator']->getLocale();
@@ -70,6 +71,7 @@ class ControllerProviderTest extends TestCase
         $controllerCollectionHandle = Phony::partialMock('\\Silex\\ControllerCollection', [$defaultRoute]);
         $app['controllers_factory'] = $controllerCollectionHandle->get();
         $controllerProvider = new ControllerProvider();
+        $controllerProvider->setTemplatePath(__DIR__.'/../../../vendor/philiplb/crudlex/src/views');
         $controllerProvider->connect($app);
         $controllerCollectionHandle->get->calledWith('/resource/static', '*');
         $controllerCollectionHandle->match->calledWith('/{entity}/create', '*');
