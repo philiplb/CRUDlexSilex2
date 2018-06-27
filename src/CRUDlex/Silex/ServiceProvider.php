@@ -33,6 +33,12 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
 {
 
     /**
+     * Holds the directory of the locales.
+     * @var string
+     */
+    protected $localeDir;
+
+    /**
      * Initializes the available locales.
      *
      * @param Container $app
@@ -40,11 +46,10 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
      */
     protected function initLocales(Container $app)
     {
-        $locales   = Service::getLocales();
-        $localeDir = __DIR__.'/../../../../CRUDlex/src/locales';
+        $locales = Service::getLocales();
         $app['translator']->addLoader('yaml', new YamlFileLoader());
         foreach ($locales as $locale) {
-            $app['translator']->addResource('yaml', $localeDir.'/'.$locale.'.yml', $locale);
+            $app['translator']->addResource('yaml', $this->localeDir.'/'.$locale.'.yml', $locale);
         }
     }
 
@@ -71,6 +76,25 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
         if (!$app->offsetExists('twig')) {
             $app->register(new TwigServiceProvider());
         }
+    }
+
+    /**
+     * ServiceProvider constructor.
+     */
+    public function __construct()
+    {
+        $this->localeDir = __DIR__.'/../../../../CRUDlex/src/locales';
+    }
+
+    /**
+     * Sets the directory containing the locales.
+     *
+     * @param string $localeDir
+     * the directory containing the locales.
+     */
+    public function setLocaleDir($localeDir)
+    {
+        $this->localeDir = $localeDir;
     }
 
     /**

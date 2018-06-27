@@ -11,6 +11,7 @@
 
 namespace CRUDlexTests\Silex;
 
+use CRUDlex\Service;
 use CRUDlex\Silex\ServiceProvider;
 use CRUDlex\MySQLDataFactory;
 use CRUDlexTestEnv\TestDBSetup;
@@ -56,7 +57,9 @@ class ServiceProviderTest extends TestCase
     public function testRegisterAndBoot()
     {
         $app = new Application();
-        $app->register(new ServiceProvider(), [
+        $serviceProvider = new ServiceProvider();
+        $serviceProvider->setLocaleDir(__DIR__.'/../../../vendor/philiplb/crudlex/src/locales');
+        $app->register($serviceProvider, [
             'crud.file' => $this->crudFile,
             'crud.datafactory' => $this->dataFactory
         ]);
