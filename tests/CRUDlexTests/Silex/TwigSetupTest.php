@@ -12,9 +12,14 @@
 namespace CRUDlexTests\Silex;
 
 use CRUDlex\Silex\TwigSetup;
+use Eloquent\Phony\Phpunit\Phony;
 use PHPUnit\Framework\TestCase;
 use Silex\Application;
+use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
 
 class TwigSetupTest extends TestCase
 {
@@ -23,6 +28,9 @@ class TwigSetupTest extends TestCase
     {
         $app = new Application();
         $app->register(new TwigServiceProvider());
+        $app->register(new SessionServiceProvider(), [
+            'session.storage' => new MockArraySessionStorage(),
+        ]);
         $twigSetup = new TwigSetup();
         $twigSetup->registerTwigExtensions($app);
         $filter = $app['twig']->getFilter('crudlex_arrayColumn');
@@ -49,6 +57,26 @@ class TwigSetupTest extends TestCase
         $read = call_user_func($filter->getCallable(), null);
         $expected = '';
         $this->assertSame($read, $expected);
+
+        $requestStackMock = Phony::mock('Symfony\\Component\\HttpFoundation\\RequestStack');
+        $requestStackMock->getCurrentRequest->returns(new Request());
+        unset($app['request_stack']);
+        $app['request_stack'] = $requestStackMock->get();
+        $filter = $app['twig']->getFunction('crudlex_getCurrentUri');
+        $read = call_user_func($filter->getCallable());
+        $expected = 'http://:/';
+        $this->assertSame($read, $expected);
+
+        $filter = $app['twig']->getFunction('crudlex_sessionGet');
+        $read = call_user_func($filter->getCallable(), 'foo', 'bar');
+        $expected = 'bar';
+        $this->assertSame($read, $expected);
+
+        $filter = $app['twig']->getFunction('crudlex_sessionFlashBagGet');
+        $read = call_user_func($filter->getCallable(), 'foo');
+        $expected = [];
+        $this->assertSame($read, $expected);
+
     }
 
 }
