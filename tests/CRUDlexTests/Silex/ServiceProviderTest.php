@@ -11,6 +11,7 @@
 
 namespace CRUDlexTests\Silex;
 
+use CRUDlex\EntityDefinitionValidator;
 use CRUDlex\Service;
 use CRUDlex\Silex\ServiceProvider;
 use CRUDlex\MySQLDataFactory;
@@ -62,6 +63,18 @@ class ServiceProviderTest extends TestCase
         $app->register($serviceProvider, [
             'crud.file' => $this->crudFile,
             'crud.datafactory' => $this->dataFactory
+        ]);
+        $this->assertTrue($app->offsetExists('crud'));
+        $app->boot();
+        $expected = ['library', 'book'];
+        $acutal = $app['crud']->getEntities();
+        $this->assertEquals($expected, $acutal);
+
+        $app = new Application();
+        $app['crud.entitydefinitionvalidator'] = new EntityDefinitionValidator();
+        $app->register($serviceProvider, [
+            'crud.file' => $this->crudFile,
+            'crud.datafactory' => $this->dataFactory,
         ]);
         $this->assertTrue($app->offsetExists('crud'));
         $app->boot();
