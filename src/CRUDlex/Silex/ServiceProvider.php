@@ -79,6 +79,24 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
     }
 
     /**
+     * Creates an EntityDefinitionValidator according to the configuration.
+     *
+     * @param Container $app
+     * the Container instance of the Silex application
+     */
+    protected function createEntityDefinitionValidator(Container $app)
+    {
+        $doValidate = !$app->offsetExists('crud.validateentitydefinition') || $app['crud.validateentitydefinition'] === true;
+        $validator  = null;
+        if ($doValidate) {
+            $validator = $app->offsetExists('crud.entitydefinitionvalidator')
+                ? $app['crud.entitydefinitionvalidator']
+                : new EntityDefinitionValidator();
+        }
+        return $validator;
+    }
+
+    /**
      * ServiceProvider constructor.
      */
     public function __construct()
@@ -110,13 +128,7 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
             $app['crud.filesystem'] = new Filesystem(new Local(getcwd()));
         }
 
-        $doValidate = !$app->offsetExists('crud.validateentitydefinition') || $app['crud.validateentitydefinition'] === true;
-        $validator  = null;
-        if ($doValidate) {
-            $validator = $app->offsetExists('crud.entitydefinitionvalidator')
-                ? $app['crud.entitydefinitionvalidator']
-                : new EntityDefinitionValidator();
-        }
+        $validator = $this->createEntityDefinitionValidator($app);
 
         $app['crud'] = function() use ($app, $validator) {
             $crudFileCachingDirectory = $app->offsetExists('crud.filecachingdirectory') ? $app['crud.filecachingdirectory'] : null;
