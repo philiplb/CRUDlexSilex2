@@ -14,7 +14,7 @@
     "require": {
         "php": ">=7.1.3",
         "silex/silex": "^2.2, !=2.2.3",
-        "philiplb/crudlex": "0.14.x-dev"
+        "philiplb/crudlex": "0.15.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.2",
