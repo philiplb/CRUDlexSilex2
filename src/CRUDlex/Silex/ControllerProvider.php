@@ -95,7 +95,7 @@ class ControllerProvider implements ControllerProviderInterface
      */
     public function __construct()
     {
-        $this->templatePath = __DIR__.'/../../../../CRUDlex/src/views/';
+        $this->templatePath = __DIR__.'/../../../../crudlex/src/views/';
     }
 
     /**
