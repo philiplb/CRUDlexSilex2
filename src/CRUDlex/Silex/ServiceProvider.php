@@ -136,6 +136,9 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
             $result                   = new Service($app['crud.file'], $crudFileCachingDirectory, $app['url_generator'], $app['translator'], $app['crud.datafactory'], $entityDefinitionFactory, $app['crud.filesystem'], $validator);
             return $result;
         };
+
+        $twigSetup = new TwigSetup();
+        $twigSetup->registerTwigExtensions($app);
     }
 
     /**
@@ -148,8 +151,6 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
     {
         $this->initMissingServiceProviders($app);
         $this->initLocales($app);
-        $twigSetup = new TwigSetup();
-        $twigSetup->registerTwigExtensions($app);
     }
 
 }
