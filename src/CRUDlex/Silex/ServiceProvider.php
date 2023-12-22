@@ -101,7 +101,7 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
      */
     public function __construct()
     {
-        $this->localeDir = __DIR__.'/../../../../CRUDlex/src/locales';
+        $this->localeDir = __DIR__.'/../../../../crudlex/src/locales';
     }
 
     /**
