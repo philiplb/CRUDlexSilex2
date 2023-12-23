@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.1.3",
-        "silex/silex": "^2.2, !=2.2.3",
+        "spryker/silexphp": "0.3.11",
         "philiplb/crudlex": "0.15.x-dev"
     },
     "require-dev": {
