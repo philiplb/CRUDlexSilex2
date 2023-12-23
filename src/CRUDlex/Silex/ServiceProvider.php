@@ -16,9 +16,7 @@ use CRUDlex\EntityDefinitionValidator;
 use CRUDlex\Service;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use Silex\Api\BootableProviderInterface;
+use Silex\ServiceProviderInterface;
 use Silex\Application;
 use Silex\Provider\LocaleServiceProvider;
 use Silex\Provider\SessionServiceProvider;
@@ -29,7 +27,7 @@ use Symfony\Component\Translation\Loader\YamlFileLoader;
 /**
  * The ServiceProvider setups and initializes the service for Silex.
  */
-class ServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+class ServiceProvider implements ServiceProviderInterface
 {
 
     /**
@@ -41,10 +39,10 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
     /**
      * Initializes the available locales.
      *
-     * @param Container $app
+     * @param Application $app
      * the application container
      */
-    protected function initLocales(Container $app)
+    protected function initLocales(Application $app)
     {
         $locales = Service::getLocales();
         $app['translator']->addLoader('yaml', new YamlFileLoader());
@@ -56,10 +54,10 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
     /**
      * Initializes needed but yet missing service providers.
      *
-     * @param Container $app
+     * @param Application $app
      * the application container
      */
-    protected function initMissingServiceProviders(Container $app)
+    protected function initMissingServiceProviders(Application $app)
     {
 
         if (!$app->offsetExists('translator')) {
@@ -84,7 +82,7 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
      * @param Container $app
      * the Container instance of the Silex application
      */
-    protected function createEntityDefinitionValidator(Container $app)
+    protected function createEntityDefinitionValidator(Application $app)
     {
         $doValidate = !$app->offsetExists('crud.validateentitydefinition') || $app['crud.validateentitydefinition'] === true;
         $validator  = null;
@@ -119,10 +117,10 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
      * Implements ServiceProviderInterface::register() registering $app['crud'].
      * $app['crud'] contains an instance of the ServiceProvider afterwards.
      *
-     * @param Container $app
-     * the Container instance of the Silex application
+     * @param Application $app
+     * the Application instance of the Silex application
      */
-    public function register(Container $app)
+    public function register(Application $app)
     {
         if (!$app->offsetExists('crud.filesystem')) {
             $app['crud.filesystem'] = new Filesystem(new Local(getcwd()));
@@ -145,7 +143,7 @@ class ServiceProvider implements ServiceProviderInterface, BootableProviderInter
      * Initializes the crud service right after boot.
      *
      * @param Application $app
-     * the Container instance of the Silex application
+     * the Application instance of the Silex application
      */
     public function boot(Application $app)
     {

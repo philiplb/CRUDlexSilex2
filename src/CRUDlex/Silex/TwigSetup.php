@@ -11,7 +11,7 @@
 namespace CRUDlex\Silex;
 
 use CRUDlex\TwigExtensions;
-use Pimple\Container;
+use Silex\Application;
 
 /**
 * Provides and setups the Twig extensions like filters for Silex.
@@ -22,10 +22,10 @@ class TwigSetup
     /**
      * Registers all extensions.
      *
-     * @param Container $app
+     * @param Application $app
      * the current application
      */
-    public function registerTwigExtensions(Container $app)
+    public function registerTwigExtensions(Application $app)
     {
         $twigExtensions = new TwigExtensions();
         $app->extend('twig', function(\Twig_Environment $twig) use ($twigExtensions, $app) {

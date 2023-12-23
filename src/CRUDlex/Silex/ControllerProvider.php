@@ -13,7 +13,7 @@ namespace CRUDlex\Silex;
 
 use CRUDlex\Controller;
 use CRUDlex\ControllerInterface;
-use Silex\Api\ControllerProviderInterface;
+use Silex\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
